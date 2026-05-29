@@ -45,12 +45,32 @@ export default function Footer() {
             <h3 className="font-heading font-semibold text-white mb-4">
               Connect
             </h3>
-            <p className="text-muted text-sm mb-4">
+            <p className="text-muted text-sm mb-2">
               <a
                 href={`mailto:${SITE.email}`}
                 className="link-underline hover:text-crystal-cyan"
               >
                 {SITE.email}
+              </a>
+            </p>
+            <p className="text-muted text-sm mb-2">
+              <a
+                href={SITE.discord}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-underline hover:text-crystal-cyan"
+              >
+                Discord
+              </a>
+            </p>
+            <p className="text-muted text-sm mb-4">
+              <a
+                href={SITE.telegram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-underline hover:text-crystal-cyan"
+              >
+                {SITE.telegramHandle}
               </a>
             </p>
             <div className="flex gap-4">

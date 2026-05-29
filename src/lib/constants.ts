@@ -5,8 +5,6 @@ import type {
   Project,
   Service,
   Stat,
-  TeamMember,
-  Testimonial,
   Value,
 } from "@/types";
 
@@ -15,9 +13,11 @@ export const SITE = {
   tagline: "Building the Future, One Line of Code at a Time",
   description:
     "Crystal Dev Labs - Your Partner for Cutting-Edge Digital Solutions",
-  email: "contact@crystaldevlabs.com",
-  discord: "https://discord.gg/crystaldevlabs",
-  discordTicket: "https://discord.gg/crystaldevlabs",
+  email: "jackson97107@gmail.com",
+  discord: "https://discord.gg/jqQutYMAn",
+  discordTicket: "https://discord.gg/jqQutYMAn",
+  telegram: "https://t.me/eu00823",
+  telegramHandle: "@eu00823",
   github: "https://github.com/crystaldevlabs",
   linkedin: "https://linkedin.com/company/crystaldevlabs",
   twitter: "https://twitter.com/crystaldevlabs",
@@ -163,49 +163,10 @@ export const FEATURES: Feature[] = [
 ];
 
 export const STATS: Stat[] = [
-  { label: "Projects Completed", value: 150, suffix: "+" },
-  { label: "Happy Clients", value: 100, suffix: "+" },
-  { label: "Lines of Code", value: 500, suffix: "K+", prefix: "" },
-  { label: "Years Experience", value: 5, suffix: "+" },
-];
-
-export const TESTIMONIALS: Testimonial[] = [
-  {
-    id: "1",
-    name: "Sarah Chen",
-    company: "NovaTech Solutions",
-    quote:
-      "Crystal Dev Labs transformed our vision into a stunning platform. Their attention to detail and communication throughout the project was exceptional.",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-    rating: 5,
-  },
-  {
-    id: "2",
-    name: "Marcus Rivera",
-    company: "ChainVault Finance",
-    quote:
-      "The smart contract audit and DApp they built exceeded our expectations. Professional, secure, and delivered ahead of schedule.",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus",
-    rating: 5,
-  },
-  {
-    id: "3",
-    name: "Elena Kowalski",
-    company: "PixelForge Studio",
-    quote:
-      "Our Discord bot handles 50K+ members flawlessly. Crystal Dev Labs understood our community needs and delivered a bot that just works.",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
-    rating: 5,
-  },
-  {
-    id: "4",
-    name: "James Okonkwo",
-    company: "AI Dynamics",
-    quote:
-      "The LLM integration they built cut our support tickets by 60%. Incredible ROI and a team that truly understands AI.",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=James",
-    rating: 5,
-  },
+  { label: "Projects Completed", value: 7, suffix: "" },
+  { label: "Happy Clients", value: 5, suffix: "+" },
+  { label: "Lines of Code", value: 50, suffix: "K+", prefix: "" },
+  { label: "Years Experience", value: 3, suffix: "+" },
 ];
 
 export const PROJECTS: Project[] = [
@@ -307,60 +268,6 @@ export const PROJECTS: Project[] = [
     screenshots: [
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&q=80",
     ],
-  },
-  {
-    id: "8",
-    title: "NFT Genesis Marketplace",
-    category: "blockchain",
-    image: "https://images.unsplash.com/photo-1620325865820-ab35d835b6e5?w=800&q=80",
-    description:
-      "Full NFT marketplace with minting, auctions, royalties, and wallet integration.",
-    techStack: ["Solidity", "IPFS", "Web3.js", "Next.js"],
-    client: "ArtChain Collective",
-    outcomes: "5K NFTs minted in launch week, $500K volume.",
-    screenshots: [
-      "https://images.unsplash.com/photo-1620325865820-ab35d835b6e5?w=1200&q=80",
-    ],
-  },
-];
-
-export const TEAM: TeamMember[] = [
-  {
-    id: "1",
-    name: "Alex Morgan",
-    role: "Founder & Lead Developer",
-    bio: "Full-stack architect with 10+ years building scalable web and blockchain solutions.",
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
-    twitter: "https://twitter.com",
-  },
-  {
-    id: "2",
-    name: "Jordan Lee",
-    role: "AI & ML Engineer",
-    bio: "Specializes in LLM integration, custom AI agents, and machine learning pipelines.",
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jordan",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
-  },
-  {
-    id: "3",
-    name: "Sam Rivera",
-    role: "Blockchain Developer",
-    bio: "Smart contract auditor and Web3 developer across Ethereum and Bitcoin SV ecosystems.",
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sam",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
-  },
-  {
-    id: "4",
-    name: "Taylor Kim",
-    role: "UI/UX Designer",
-    bio: "Creates immersive digital experiences with a focus on motion design and accessibility.",
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Taylor",
-    linkedin: "https://linkedin.com",
-    twitter: "https://twitter.com",
   },
 ];
 

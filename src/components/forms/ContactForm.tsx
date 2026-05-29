@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { SERVICES, BUDGET_OPTIONS } from "@/lib/constants";
+import { SERVICES, BUDGET_OPTIONS, SITE } from "@/lib/constants";
 import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import type { ServiceId } from "@/types";
@@ -79,7 +79,11 @@ export default function ContactForm() {
         <h3 className="heading-md gradient-text mb-4">Message Sent!</h3>
         <p className="text-muted mb-6">
           Thank you for reaching out. We&apos;ll get back to you within 24
-          hours. You can also join our Discord for faster support.
+          hours. Reach us faster on{" "}
+          <a href={SITE.discord} className="text-crystal-cyan underline">
+            Discord
+          </a>{" "}
+          or Telegram {SITE.telegramHandle}.
         </p>
         <Button href="/" variant="outline">
           Back to Home

@@ -9,8 +9,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import Hero from "@/components/sections/Hero";
-import TeamCard from "@/components/cards/TeamCard";
-import { TEAM, VALUES } from "@/lib/constants";
+import { VALUES } from "@/lib/constants";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
 const Crystal3D = dynamic(
@@ -21,7 +20,7 @@ const Crystal3D = dynamic(
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Learn about Crystal Dev Labs — our story, mission, team, and values driving innovation in digital development.",
+    "Learn about Crystal Dev Labs — our story, mission, and values driving innovation in digital development.",
 };
 
 const valueIcons: Record<string, LucideIcon> = {
@@ -52,9 +51,9 @@ export default function AboutPage() {
             <div className="space-y-4 text-muted leading-relaxed">
               <p>
                 Founded with a vision to bridge cutting-edge technology and
-                real-world business needs, Crystal Dev Labs has grown into a
-                full-service development agency trusted by startups and
-                enterprises worldwide.
+                real-world business needs, Crystal Dev Labs has delivered{" "}
+                <strong className="text-white">7 successful projects</strong>{" "}
+                across web, AI, bots, software, and blockchain.
               </p>
               <p>
                 <strong className="text-white">Mission:</strong> Empower
@@ -73,19 +72,6 @@ export default function AboutPage() {
               <Crystal3D />
             </div>
           </ScrollReveal>
-        </div>
-      </section>
-
-      <section className="section-padding bg-white/5">
-        <ScrollReveal>
-          <h2 className="heading-lg text-center mb-16">
-            Meet Our <span className="gradient-text">Team</span>
-          </h2>
-        </ScrollReveal>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {TEAM.map((member, i) => (
-            <TeamCard key={member.id} member={member} index={i} />
-          ))}
         </div>
       </section>
 

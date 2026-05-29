@@ -61,7 +61,7 @@ const jsonLd = {
   url: SITE.url,
   email: SITE.email,
   description: SITE.description,
-  sameAs: [SITE.github, SITE.linkedin, SITE.twitter],
+  sameAs: [SITE.discord, SITE.telegram, SITE.github, SITE.linkedin, SITE.twitter],
   serviceType: [
     "Website Development",
     "AI Development",

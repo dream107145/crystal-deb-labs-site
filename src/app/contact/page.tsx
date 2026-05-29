@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail, MessageCircle, Send } from "lucide-react";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import Hero from "@/components/sections/Hero";
 import ContactForm from "@/components/forms/ContactForm";
@@ -56,7 +56,19 @@ export default function ContactPage() {
                   <MessageCircle className="w-6 h-6 text-crystal-purple group-hover:text-crystal-cyan" />
                   <div>
                     <p className="text-sm text-muted">Discord</p>
-                    <p className="text-white font-medium">Join our server</p>
+                    <p className="text-white font-medium">Crystal Dev Labs</p>
+                  </div>
+                </a>
+                <a
+                  href={SITE.telegram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-4 glass rounded-xl p-4 hover:glow-cyan-hover transition-shadow group"
+                >
+                  <Send className="w-6 h-6 text-crystal-blue group-hover:text-crystal-cyan" />
+                  <div>
+                    <p className="text-sm text-muted">Telegram</p>
+                    <p className="text-white font-medium">{SITE.telegramHandle}</p>
                   </div>
                 </a>
               </div>
