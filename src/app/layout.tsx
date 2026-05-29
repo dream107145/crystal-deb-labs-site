@@ -52,6 +52,11 @@ export const metadata: Metadata = {
     description: SITE.description,
   },
   robots: { index: true, follow: true },
+  icons: {
+    icon: [{ url: SITE.logo, type: "image/svg+xml" }],
+    apple: [{ url: SITE.logo, type: "image/svg+xml" }],
+    shortcut: SITE.logo,
+  },
 };
 
 const jsonLd = {

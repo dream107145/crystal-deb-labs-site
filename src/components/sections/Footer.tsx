@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Gem } from "lucide-react";
+import Image from "next/image";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { NAV_LINKS, SITE } from "@/lib/constants";
 
@@ -12,7 +12,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <Gem className="w-6 h-6 text-crystal-blue" aria-hidden />
+              <Image src={SITE.logo} alt="" width={24} height={24} className="w-6 h-6" />
               <span className="font-heading font-bold gradient-text">
                 {SITE.name}
               </span>

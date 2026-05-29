@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Gem } from "lucide-react";
+import Image from "next/image";
+import { Menu, X } from "lucide-react";
 import { NAV_LINKS, SITE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import Button from "./Button";
@@ -41,10 +42,18 @@ export default function Navbar() {
           aria-label={`${SITE.name} home`}
         >
           <motion.div
-            whileHover={{ rotate: 180 }}
+            whileHover={{ rotate: 180, scale: 1.05 }}
             transition={{ duration: 0.5 }}
+            className="relative w-8 h-8 shrink-0"
           >
-            <Gem className="w-8 h-8 text-crystal-blue" aria-hidden />
+            <Image
+              src={SITE.logo}
+              alt=""
+              width={32}
+              height={32}
+              className="w-8 h-8"
+              priority
+            />
           </motion.div>
           <span className="font-heading font-bold text-lg gradient-text">
             {SITE.name}

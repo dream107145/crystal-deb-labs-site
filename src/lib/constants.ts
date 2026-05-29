@@ -22,6 +22,7 @@ export const SITE = {
   linkedin: "https://linkedin.com/company/crystaldevlabs",
   twitter: "https://twitter.com/crystaldevlabs",
   url: "https://crystaldevlabs.com",
+  logo: "/logo.svg",
 };
 
 export const NAV_LINKS = [

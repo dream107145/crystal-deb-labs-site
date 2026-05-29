@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Gem } from "lucide-react";
+import Image from "next/image";
 import { SITE } from "@/lib/constants";
 
 export default function LoadingScreen() {
@@ -34,9 +34,17 @@ export default function LoadingScreen() {
             animate={{ rotate: 360 }}
             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
           >
-            <Gem className="w-16 h-16 text-crystal-blue" style={{
-              filter: "drop-shadow(0 0 20px rgba(0, 212, 255, 0.8))",
-            }} />
+            <Image
+              src={SITE.logo}
+              alt=""
+              width={64}
+              height={64}
+              className="w-16 h-16"
+              style={{
+                filter: "drop-shadow(0 0 20px rgba(0, 212, 255, 0.8))",
+              }}
+              priority
+            />
           </motion.div>
           <motion.p
             className="mt-6 font-heading font-bold text-xl gradient-text"
