@@ -46,7 +46,6 @@ export interface TeamMember {
   role: string;
   bio: string;
   photo: string;
-  twitter?: string;
 }
 
 export interface FAQ {

@@ -18,7 +18,6 @@ export const SITE = {
   discordTicket: "https://discord.gg/jqQutYMAn",
   telegram: "https://t.me/eu00823",
   telegramHandle: "@eu00823",
-  twitter: "https://twitter.com/crystaldevlabs",
   url: "https://crystaldevlabs.com",
   logo: "/logo.svg",
 };

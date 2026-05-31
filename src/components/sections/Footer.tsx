@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { FaTwitter } from "react-icons/fa";
 import { NAV_LINKS, SITE } from "@/lib/constants";
 
 export default function Footer() {
@@ -73,17 +72,6 @@ export default function Footer() {
                 {SITE.telegramHandle}
               </a>
             </p>
-            <div className="flex gap-4">
-              <a
-                href={SITE.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted hover:text-crystal-cyan transition-colors"
-                aria-label="Twitter"
-              >
-                <FaTwitter className="w-5 h-5" />
-              </a>
-            </div>
           </div>
         </div>
 

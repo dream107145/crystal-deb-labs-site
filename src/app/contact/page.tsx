@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Mail, MessageCircle, Send } from "lucide-react";
-import { FaTwitter } from "react-icons/fa";
 import Hero from "@/components/sections/Hero";
 import ContactForm from "@/components/forms/ContactForm";
 import FAQ from "@/components/sections/FAQ";
@@ -71,23 +70,6 @@ export default function ContactPage() {
                     <p className="text-white font-medium">{SITE.telegramHandle}</p>
                   </div>
                 </a>
-              </div>
-
-              <div>
-                <h3 className="font-heading font-semibold text-white mb-4">
-                  Follow Us
-                </h3>
-                <div className="flex gap-4">
-                  <a
-                    href={SITE.twitter}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 glass rounded-xl hover:glow-cyan text-muted hover:text-crystal-cyan transition-all"
-                    aria-label="Twitter"
-                  >
-                    <FaTwitter className="w-6 h-6" />
-                  </a>
-                </div>
               </div>
             </div>
           </ScrollReveal>
