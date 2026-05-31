@@ -26,10 +26,13 @@ Open [http://localhost:3000](http://localhost:3000).
 
 | Variable | Description |
 |----------|-------------|
-| `DISCORD_WEBHOOK_URL` | Discord webhook URL for contact form submissions |
+| `RESEND_API_KEY` | Resend API key for sending contact form emails |
+| `RESEND_FROM_EMAIL` | Verified sender address (e.g. `Crystal Dev Labs <contact@crystaldevlabs.com>`) |
+| `ADMIN_EMAIL` | Admin inbox that receives contact form submissions |
+| `DISCORD_WEBHOOK_URL` | Optional Discord webhook for contact form submissions |
 | `NEXT_PUBLIC_SITE_URL` | Public site URL for metadata |
 
-Without `DISCORD_WEBHOOK_URL`, form submissions are logged to the server console.
+Without Resend env vars, form submissions are logged to the server console.
 
 ## Project Structure
 
@@ -59,7 +62,7 @@ src/
 
 1. Push to GitHub
 2. Import project in Vercel
-3. Add `DISCORD_WEBHOOK_URL` in Environment Variables
+3. Add `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `ADMIN_EMAIL` in Environment Variables
 4. Deploy
 
 ## Performance Notes

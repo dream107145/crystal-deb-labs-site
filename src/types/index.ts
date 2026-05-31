@@ -46,8 +46,6 @@ export interface TeamMember {
   role: string;
   bio: string;
   photo: string;
-  github?: string;
-  linkedin?: string;
   twitter?: string;
 }
 

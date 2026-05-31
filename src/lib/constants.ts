@@ -18,8 +18,6 @@ export const SITE = {
   discordTicket: "https://discord.gg/jqQutYMAn",
   telegram: "https://t.me/eu00823",
   telegramHandle: "@eu00823",
-  github: "https://github.com/crystaldevlabs",
-  linkedin: "https://linkedin.com/company/crystaldevlabs",
   twitter: "https://twitter.com/crystaldevlabs",
   url: "https://crystaldevlabs.com",
   logo: "/logo.svg",
@@ -204,14 +202,14 @@ export const PROJECTS: Project[] = [
     id: "3",
     title: "CommunityGuard Bot",
     category: "bot",
-    image: "https://images.unsplash.com/photo-1614680376573-df3480f5f6ae?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80",
     description:
       "Discord moderation bot with auto-mod, ticketing, role management, and custom economy system.",
     techStack: ["Discord.js", "Node.js", "Redis", "MongoDB"],
     client: "PixelForge Studio",
     outcomes: "Serving 50K+ members with 99.9% uptime.",
     screenshots: [
-      "https://images.unsplash.com/photo-1614680376573-df3480f5f6ae?w=1200&q=80",
+      "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80",
     ],
   },
   {
@@ -232,14 +230,14 @@ export const PROJECTS: Project[] = [
     id: "5",
     title: "ChainVault DeFi",
     category: "blockchain",
-    image: "https://images.unsplash.com/photo-1639762681485-074b7f938e0e?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=800&q=80",
     description:
       "Decentralized finance protocol with staking, yield farming, and audited smart contracts.",
     techStack: ["Solidity", "Hardhat", "Ethers.js", "React"],
     client: "ChainVault Finance",
     outcomes: "$2M TVL within first quarter post-launch.",
     screenshots: [
-      "https://images.unsplash.com/photo-1639762681485-074b7f938e0e?w=1200&q=80",
+      "https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=1200&q=80",
     ],
   },
   {

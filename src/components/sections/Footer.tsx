@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa";
 import { NAV_LINKS, SITE } from "@/lib/constants";
 
 export default function Footer() {
@@ -74,24 +74,6 @@ export default function Footer() {
               </a>
             </p>
             <div className="flex gap-4">
-              <a
-                href={SITE.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted hover:text-crystal-cyan transition-colors"
-                aria-label="GitHub"
-              >
-                <FaGithub className="w-5 h-5" />
-              </a>
-              <a
-                href={SITE.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted hover:text-crystal-cyan transition-colors"
-                aria-label="LinkedIn"
-              >
-                <FaLinkedin className="w-5 h-5" />
-              </a>
               <a
                 href={SITE.twitter}
                 target="_blank"

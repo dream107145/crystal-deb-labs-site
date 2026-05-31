@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Mail, MessageCircle, Send } from "lucide-react";
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa";
 import Hero from "@/components/sections/Hero";
 import ContactForm from "@/components/forms/ContactForm";
 import FAQ from "@/components/sections/FAQ";
@@ -78,24 +78,6 @@ export default function ContactPage() {
                   Follow Us
                 </h3>
                 <div className="flex gap-4">
-                  <a
-                    href={SITE.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 glass rounded-xl hover:glow-cyan text-muted hover:text-crystal-cyan transition-all"
-                    aria-label="GitHub"
-                  >
-                    <FaGithub className="w-6 h-6" />
-                  </a>
-                  <a
-                    href={SITE.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 glass rounded-xl hover:glow-cyan text-muted hover:text-crystal-cyan transition-all"
-                    aria-label="LinkedIn"
-                  >
-                    <FaLinkedin className="w-6 h-6" />
-                  </a>
                   <a
                     href={SITE.twitter}
                     target="_blank"
