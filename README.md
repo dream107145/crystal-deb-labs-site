@@ -27,7 +27,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | Variable | Description |
 |----------|-------------|
 | `RESEND_API_KEY` | Resend API key for sending contact form emails |
-| `RESEND_FROM_EMAIL` | Verified sender address (e.g. `Crystal Dev Labs <contact@crystaldevlabs.com>`) |
+| `RESEND_FROM_EMAIL` | Verified sender on `contact.crystaldevlabs.com` (e.g. `Crystal Dev Labs <noreply@contact.crystaldevlabs.com>`) |
 | `ADMIN_EMAIL` | Admin inbox that receives contact form submissions |
 | `DISCORD_WEBHOOK_URL` | Optional Discord webhook for contact form submissions |
 | `NEXT_PUBLIC_SITE_URL` | Public site URL for metadata |

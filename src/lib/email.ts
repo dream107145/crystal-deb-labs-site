@@ -1,6 +1,9 @@
 import { Resend } from "resend";
 import { SERVICES } from "@/lib/constants";
 
+const VERIFIED_SEND_DOMAIN = "contact.crystaldevlabs.com";
+const DEFAULT_FROM_EMAIL = `Crystal Dev Labs <noreply@${VERIFIED_SEND_DOMAIN}>`;
+
 const budgetLabels: Record<string, string> = {
   "under-1k": "Under $1,000",
   "1k-5k": "$1,000 - $5,000",
@@ -47,10 +50,36 @@ function escapeHtml(value: string) {
     .replace(/"/g, "&quot;");
 }
 
+function normalizeSenderAddress(address: string) {
+  const at = address.lastIndexOf("@");
+  if (at === -1) return address;
+
+  const local = address.slice(0, at);
+  const domain = address.slice(at + 1).toLowerCase();
+
+  if (domain === "crystaldevlabs.com") {
+    return `${local}@${VERIFIED_SEND_DOMAIN}`;
+  }
+
+  return address;
+}
+
+function resolveFromEmail(raw?: string) {
+  const value = raw?.trim() || DEFAULT_FROM_EMAIL;
+  const namedMatch = value.match(/^(.+?)\s*<([^>]+)>$/);
+
+  if (namedMatch) {
+    const [, displayName, address] = namedMatch;
+    return `${displayName.trim()} <${normalizeSenderAddress(address.trim())}>`;
+  }
+
+  return normalizeSenderAddress(value);
+}
+
 export async function sendContactNotification(data: ContactEmailData) {
   const apiKey = process.env.RESEND_API_KEY;
   const adminEmail = process.env.ADMIN_EMAIL;
-  const fromEmail = process.env.RESEND_FROM_EMAIL;
+  const fromEmail = resolveFromEmail(process.env.RESEND_FROM_EMAIL);
 
   if (!apiKey || !adminEmail || !fromEmail) {
     return { sent: false as const, reason: "missing_config" as const };
