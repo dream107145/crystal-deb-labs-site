@@ -7,7 +7,7 @@ import { sendBulkEmail } from "@/lib/email";
 const bulkEmailSchema = z.object({
   user_ids: z.array(z.string().uuid()).min(1),
   subject: z.string().min(1).max(200),
-  body: z.string().min(1).max(10000),
+  html: z.string().min(1).max(50000),
 });
 
 export async function POST(request: Request) {
@@ -43,8 +43,8 @@ export async function POST(request: Request) {
   }
 
   const html = `
-    <div style="font-family:sans-serif;line-height:1.6;">
-      ${parsed.data.body.replace(/\n/g, "<br>")}
+    <div style="font-family:sans-serif;line-height:1.6;max-width:600px;">
+      ${parsed.data.html}
     </div>
   `;
 

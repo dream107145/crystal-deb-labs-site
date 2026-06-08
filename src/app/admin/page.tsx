@@ -6,6 +6,7 @@ import UserManagement from "@/components/admin/UserManagement";
 import PortfolioManagement from "@/components/admin/PortfolioManagement";
 import ContactInfoManagement from "@/components/admin/ContactInfoManagement";
 import Button from "@/components/ui/Button";
+import { signOutUser } from "@/lib/signOut";
 import { cn } from "@/lib/utils";
 
 type Tab = "users" | "portfolio" | "contact";
@@ -15,7 +16,7 @@ export default function AdminPage() {
   const [tab, setTab] = useState<Tab>("users");
 
   const handleSignOut = async () => {
-    await fetch("/api/auth/signout", { method: "POST" });
+    await signOutUser();
     router.push("/");
     router.refresh();
   };

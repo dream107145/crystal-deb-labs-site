@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { AUTH_CHANGED_EVENT } from "@/lib/signOut";
 import Button from "./Button";
 import type { Profile } from "@/types/database";
 
@@ -10,40 +11,55 @@ export default function AuthLinks() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const loadProfile = useCallback(async () => {
     const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    const loadProfile = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+    if (!user) {
+      setProfile(null);
+      setLoading(false);
+      return;
+    }
 
-      if (!user) {
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+
+    setProfile(data);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    loadProfile();
+
+    const supabase = createClient();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_OUT") {
         setProfile(null);
         setLoading(false);
         return;
       }
-
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
-        .single();
-
-      setProfile(data);
-      setLoading(false);
-    };
-
-    loadProfile();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(() => {
       loadProfile();
     });
 
-    return () => subscription.unsubscribe();
-  }, []);
+    const onAuthChanged = () => {
+      setProfile(null);
+      setLoading(false);
+      loadProfile();
+    };
+    window.addEventListener(AUTH_CHANGED_EVENT, onAuthChanged);
+
+    return () => {
+      subscription.unsubscribe();
+      window.removeEventListener(AUTH_CHANGED_EVENT, onAuthChanged);
+    };
+  }, [loadProfile]);
 
   if (loading) return null;
 

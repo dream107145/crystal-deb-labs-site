@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import Button from "@/components/ui/Button";
+import ImageUpload, { MultiImageUpload } from "@/components/admin/ImageUpload";
 import { inputClass } from "@/components/forms/inputClass";
 import { cn } from "@/lib/utils";
 import type { PortfolioProject } from "@/types/database";
@@ -15,7 +16,7 @@ const emptyProject = {
   tech_stack: "",
   client: "",
   outcomes: "",
-  screenshots: "",
+  screenshots: [] as string[],
   sort_order: 0,
   published: true,
 };
@@ -26,6 +27,7 @@ export default function PortfolioManagement() {
   const [editing, setEditing] = useState<string | null>(null);
   const [form, setForm] = useState(emptyProject);
   const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const fetchProjects = async () => {
     setLoading(true);
@@ -56,7 +58,7 @@ export default function PortfolioManagement() {
         tech_stack: project.tech_stack.join(", "),
         client: project.client,
         outcomes: project.outcomes,
-        screenshots: project.screenshots.join(", "),
+        screenshots: project.screenshots,
         sort_order: project.sort_order,
         published: project.published,
       });
@@ -67,7 +69,13 @@ export default function PortfolioManagement() {
   };
 
   const handleSave = async () => {
+    if (!form.image) {
+      setError("Please upload a cover image.");
+      return;
+    }
+
     setError(null);
+    setSaving(true);
     const payload = {
       title: form.title,
       category: form.category,
@@ -76,7 +84,7 @@ export default function PortfolioManagement() {
       tech_stack: form.tech_stack.split(",").map((s) => s.trim()).filter(Boolean),
       client: form.client,
       outcomes: form.outcomes,
-      screenshots: form.screenshots.split(",").map((s) => s.trim()).filter(Boolean),
+      screenshots: form.screenshots,
       sort_order: form.sort_order,
       published: form.published,
     };
@@ -97,6 +105,8 @@ export default function PortfolioManagement() {
       fetchProjects();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -141,7 +151,6 @@ export default function PortfolioManagement() {
                 <option key={c} value={c} className="bg-crystal-darker">{c}</option>
               ))}
             </select>
-            <input className={inputClass()} placeholder="Image URL" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} />
             <input className={inputClass()} placeholder="Client" value={form.client} onChange={(e) => setForm({ ...form, client: e.target.value })} />
             <input className={inputClass()} placeholder="Sort order" type="number" value={form.sort_order} onChange={(e) => setForm({ ...form, sort_order: parseInt(e.target.value) || 0 })} />
             <label className="flex items-center gap-2 text-sm text-white">
@@ -149,12 +158,20 @@ export default function PortfolioManagement() {
               Published
             </label>
           </div>
+          <ImageUpload
+            label="Cover Image"
+            value={form.image}
+            onChange={(url) => setForm({ ...form, image: url })}
+          />
           <textarea className={cn(inputClass(), "resize-y")} placeholder="Description" rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
           <input className={inputClass()} placeholder="Tech stack (comma-separated)" value={form.tech_stack} onChange={(e) => setForm({ ...form, tech_stack: e.target.value })} />
           <textarea className={cn(inputClass(), "resize-y")} placeholder="Outcomes" rows={2} value={form.outcomes} onChange={(e) => setForm({ ...form, outcomes: e.target.value })} />
-          <input className={inputClass()} placeholder="Screenshots (comma-separated URLs)" value={form.screenshots} onChange={(e) => setForm({ ...form, screenshots: e.target.value })} />
+          <MultiImageUpload
+            values={form.screenshots}
+            onChange={(urls) => setForm({ ...form, screenshots: urls })}
+          />
           <div className="flex gap-3">
-            <Button variant="primary" onClick={handleSave}>Save</Button>
+            <Button variant="primary" onClick={handleSave} isLoading={saving}>Save</Button>
             <Button variant="ghost" onClick={() => setEditing(null)}>Cancel</Button>
           </div>
         </div>

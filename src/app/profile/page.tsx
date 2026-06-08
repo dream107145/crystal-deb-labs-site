@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import ProfileForm from "@/components/profile/ProfileForm";
 import InboxPanel from "@/components/profile/InboxPanel";
 import Button from "@/components/ui/Button";
+import { signOutUser } from "@/lib/signOut";
 import type { Profile } from "@/types/database";
 
 export default function ProfilePage() {
@@ -27,7 +28,7 @@ export default function ProfilePage() {
   }, [router]);
 
   const handleSignOut = async () => {
-    await fetch("/api/auth/signout", { method: "POST" });
+    await signOutUser();
     router.push("/");
     router.refresh();
   };
