@@ -9,6 +9,7 @@ import { Menu, X } from "lucide-react";
 import { NAV_LINKS, SITE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import Button from "./Button";
+import AuthLinks from "./AuthLinks";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -78,11 +79,7 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div className="hidden md:block">
-          <Button href="/contact" variant="primary">
-            Get Started
-          </Button>
-        </div>
+        <AuthLinks />
 
         <button
           type="button"
@@ -119,6 +116,16 @@ export default function Navbar() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link href="/auth/signin" className="block py-2 text-lg text-muted">
+                  Sign In
+                </Link>
+              </li>
+              <li>
+                <Link href="/profile" className="block py-2 text-lg text-muted">
+                  Profile
+                </Link>
+              </li>
               <li>
                 <Button href="/contact" variant="primary" className="w-full">
                   Get Started

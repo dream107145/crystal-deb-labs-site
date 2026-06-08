@@ -76,6 +76,87 @@ function resolveFromEmail(raw?: string) {
   return normalizeSenderAddress(value);
 }
 
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return null;
+  return new Resend(apiKey);
+}
+
+export async function sendVerificationEmail(email: string, token: string) {
+  const resend = getResendClient();
+  const fromEmail = resolveFromEmail(process.env.RESEND_FROM_EMAIL);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+  if (!resend || !fromEmail) {
+    return { sent: false as const, reason: "missing_config" as const };
+  }
+
+  const verifyUrl = `${siteUrl}/auth/verify?token=${token}`;
+
+  const { error } = await resend.emails.send({
+    from: fromEmail,
+    to: [email],
+    subject: "Verify your Crystal Dev Labs account",
+    html: `
+      <h2>Welcome to Crystal Dev Labs</h2>
+      <p>Please verify your email address to complete your registration.</p>
+      <p><a href="${verifyUrl}" style="display:inline-block;padding:12px 24px;background:#00d4ff;color:#0a0a0f;text-decoration:none;border-radius:8px;font-weight:600;">Verify Email</a></p>
+      <p style="color:#888;font-size:14px;">Or copy this link: ${verifyUrl}</p>
+      <p style="color:#888;font-size:14px;">This link expires in 24 hours.</p>
+    `,
+  });
+
+  if (error) throw new Error(error.message);
+  return { sent: true as const };
+}
+
+export async function sendBulkEmail(
+  recipients: string[],
+  subject: string,
+  html: string
+) {
+  const resend = getResendClient();
+  const fromEmail = resolveFromEmail(process.env.RESEND_FROM_EMAIL);
+
+  if (!resend || !fromEmail) {
+    return { sent: false as const, reason: "missing_config" as const };
+  }
+
+  const { error } = await resend.emails.send({
+    from: fromEmail,
+    to: recipients,
+    subject,
+    html,
+  });
+
+  if (error) throw new Error(error.message);
+  return { sent: true as const, count: recipients.length };
+}
+
+export async function sendApprovalEmail(email: string) {
+  const resend = getResendClient();
+  const fromEmail = resolveFromEmail(process.env.RESEND_FROM_EMAIL);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+  if (!resend || !fromEmail) {
+    return { sent: false as const, reason: "missing_config" as const };
+  }
+
+  const { error } = await resend.emails.send({
+    from: fromEmail,
+    to: [email],
+    subject: "Your developer account has been approved",
+    html: `
+      <h2>Account Approved</h2>
+      <p>Your developer account at Crystal Dev Labs has been approved by an administrator.</p>
+      <p><a href="${siteUrl}/auth/signin" style="display:inline-block;padding:12px 24px;background:#00d4ff;color:#0a0a0f;text-decoration:none;border-radius:8px;font-weight:600;">Sign In</a></p>
+    `,
+  });
+
+  if (error) throw new Error(error.message);
+  return { sent: true as const };
+}
+
 export async function sendContactNotification(data: ContactEmailData) {
   const apiKey = process.env.RESEND_API_KEY;
   const adminEmail = process.env.ADMIN_EMAIL;
@@ -85,7 +166,7 @@ export async function sendContactNotification(data: ContactEmailData) {
     return { sent: false as const, reason: "missing_config" as const };
   }
 
-  const resend = new Resend(apiKey);
+  const resend = getResendClient()!;
   const service = getServiceLabel(data.service);
 
   const { error } = await resend.emails.send({

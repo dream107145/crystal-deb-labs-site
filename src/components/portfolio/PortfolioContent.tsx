@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { AnimatePresence } from "framer-motion";
 import Hero from "@/components/sections/Hero";
@@ -12,17 +12,53 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 import type { Project, ProjectCategory } from "@/types";
 import { cn } from "@/lib/utils";
 
+function mapApiProject(p: {
+  id: string;
+  title: string;
+  category: string;
+  image: string;
+  description: string;
+  tech_stack: string[];
+  client: string;
+  outcomes: string;
+  screenshots: string[];
+}): Project {
+  return {
+    id: p.id,
+    title: p.title,
+    category: p.category as Project["category"],
+    image: p.image,
+    description: p.description,
+    techStack: p.tech_stack,
+    client: p.client,
+    outcomes: p.outcomes,
+    screenshots: p.screenshots,
+  };
+}
+
 export default function PortfolioContent() {
+  const [projects, setProjects] = useState<Project[]>(PROJECTS);
   const [filter, setFilter] = useState<ProjectCategory>("all");
   const [selected, setSelected] = useState<Project | null>(null);
   const [screenshotIndex, setScreenshotIndex] = useState(0);
 
+  useEffect(() => {
+    fetch("/api/portfolio")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.projects?.length) {
+          setProjects(json.projects.map(mapApiProject));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const filtered = useMemo(
     () =>
       filter === "all"
-        ? PROJECTS
-        : PROJECTS.filter((p) => p.category === filter),
-    [filter]
+        ? projects
+        : projects.filter((p) => p.category === filter),
+    [filter, projects]
   );
 
   return (
