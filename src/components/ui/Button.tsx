@@ -9,6 +9,8 @@ type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   href?: string;
+  target?: string;
+  rel?: string;
   isLoading?: boolean;
   children?: ReactNode;
 }
@@ -31,6 +33,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       isLoading,
       href,
+      target,
+      rel,
       disabled,
       type = "button",
       onClick,
@@ -74,7 +78,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             Sending...
           </span>
         ) : (
-          <span className="relative z-10">{children}</span>
+          <span className="relative z-10 inline-flex items-center gap-2 whitespace-nowrap">
+            {children}
+          </span>
         )}
       </>
     );
@@ -83,6 +89,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       return (
         <motion.a
           href={href}
+          target={target}
+          rel={rel}
           className={cn(classes, "group")}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}

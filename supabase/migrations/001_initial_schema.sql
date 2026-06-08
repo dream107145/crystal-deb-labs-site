@@ -50,6 +50,7 @@ create table public.portfolio_projects (
   title text not null,
   category text not null,
   image text not null,
+  link text not null default '',
   description text not null,
   tech_stack text[] not null default '{}',
   client text not null,

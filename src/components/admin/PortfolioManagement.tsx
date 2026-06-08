@@ -12,6 +12,7 @@ const emptyProject = {
   title: "",
   category: "website",
   image: "",
+  link: "",
   description: "",
   tech_stack: "",
   client: "",
@@ -54,6 +55,7 @@ export default function PortfolioManagement() {
         title: project.title,
         category: project.category,
         image: project.image,
+        link: project.link || "",
         description: project.description,
         tech_stack: project.tech_stack.join(", "),
         client: project.client,
@@ -73,6 +75,10 @@ export default function PortfolioManagement() {
       setError("Please upload a cover image.");
       return;
     }
+    if (!form.link) {
+      setError("Please provide a project link.");
+      return;
+    }
 
     setError(null);
     setSaving(true);
@@ -80,6 +86,7 @@ export default function PortfolioManagement() {
       title: form.title,
       category: form.category,
       image: form.image,
+      link: form.link,
       description: form.description,
       tech_stack: form.tech_stack.split(",").map((s) => s.trim()).filter(Boolean),
       client: form.client,
@@ -163,6 +170,19 @@ export default function PortfolioManagement() {
             value={form.image}
             onChange={(url) => setForm({ ...form, image: url })}
           />
+          <div>
+            <label htmlFor="project-link" className="block text-sm font-medium text-white mb-2">
+              Project Link <span className="text-crystal-cyan">*</span>
+            </label>
+            <input
+              id="project-link"
+              type="url"
+              className={inputClass()}
+              placeholder="https://example.com"
+              value={form.link}
+              onChange={(e) => setForm({ ...form, link: e.target.value })}
+            />
+          </div>
           <textarea className={cn(inputClass(), "resize-y")} placeholder="Description" rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
           <input className={inputClass()} placeholder="Tech stack (comma-separated)" value={form.tech_stack} onChange={(e) => setForm({ ...form, tech_stack: e.target.value })} />
           <textarea className={cn(inputClass(), "resize-y")} placeholder="Outcomes" rows={2} value={form.outcomes} onChange={(e) => setForm({ ...form, outcomes: e.target.value })} />
@@ -183,6 +203,7 @@ export default function PortfolioManagement() {
             <thead>
               <tr className="text-muted border-b border-white/10">
                 <th className="p-3 text-left">Title</th>
+                <th className="p-3 text-left">Link</th>
                 <th className="p-3 text-left">Category</th>
                 <th className="p-3 text-left">Published</th>
                 <th className="p-3 text-left">Order</th>
@@ -193,6 +214,15 @@ export default function PortfolioManagement() {
               {projects.map((p) => (
                 <tr key={p.id} className="border-b border-white/5 hover:bg-white/5">
                   <td className="p-3 text-white">{p.title}</td>
+                  <td className="p-3 text-muted max-w-[200px] truncate">
+                    {p.link ? (
+                      <a href={p.link} target="_blank" rel="noopener noreferrer" className="text-crystal-cyan hover:underline">
+                        {p.link.replace(/^https?:\/\//, "")}
+                      </a>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
                   <td className="p-3 capitalize text-muted">{p.category}</td>
                   <td className="p-3">{p.published ? "Yes" : "No"}</td>
                   <td className="p-3 text-muted">{p.sort_order}</td>

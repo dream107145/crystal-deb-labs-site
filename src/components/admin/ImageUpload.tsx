@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { Upload, X } from "lucide-react";
+import { Upload, X, ImagePlus } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
@@ -78,7 +78,7 @@ export default function ImageUpload({
       <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleUpload} />
       {!value && (
         <Button type="button" variant="outline" onClick={() => fileRef.current?.click()} isLoading={uploading}>
-          Upload Image
+          <Upload size={16} /> Upload Image
         </Button>
       )}
       {error && <p className="text-red-400 text-sm">{error}</p>}
@@ -150,7 +150,7 @@ export function MultiImageUpload({
       </div>
       <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={handleUpload} />
       <Button type="button" variant="outline" onClick={() => fileRef.current?.click()} isLoading={uploading}>
-        Add Screenshots
+        <ImagePlus size={16} /> Add Screenshots
       </Button>
     </div>
   );

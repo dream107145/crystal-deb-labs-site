@@ -30,6 +30,7 @@ export interface PortfolioProject {
   title: string;
   category: string;
   image: string;
+  link: string;
   description: string;
   tech_stack: string[];
   client: string;

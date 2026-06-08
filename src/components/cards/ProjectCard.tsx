@@ -47,6 +47,11 @@ export default function ProjectCard({
           <h3 className="text-lg font-heading font-bold text-white">
             {project.title}
           </h3>
+          {project.link && (
+            <p className="text-xs text-crystal-cyan/80 truncate mt-1">
+              {project.link.replace(/^https?:\/\//, "")}
+            </p>
+          )}
         </div>
         <motion.div
           className={cn(

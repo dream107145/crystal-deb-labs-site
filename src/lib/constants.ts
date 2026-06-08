@@ -173,6 +173,7 @@ export const PROJECTS: Project[] = [
     title: "NovaCommerce Platform",
     category: "website",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+    link: "https://novacommerce.example.com",
     description:
       "A full-featured e-commerce platform with real-time inventory, payment processing, and admin dashboard.",
     techStack: ["Next.js", "TypeScript", "Stripe", "PostgreSQL"],
@@ -188,6 +189,7 @@ export const PROJECTS: Project[] = [
     title: "SupportAI Assistant",
     category: "ai",
     image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80",
+    link: "https://supportai.example.com",
     description:
       "Custom AI chatbot integrated with company knowledge base and CRM for automated customer support.",
     techStack: ["OpenAI", "LangChain", "Python", "FastAPI"],
@@ -202,6 +204,7 @@ export const PROJECTS: Project[] = [
     title: "CommunityGuard Bot",
     category: "bot",
     image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80",
+    link: "https://discord.gg/communityguard",
     description:
       "Discord moderation bot with auto-mod, ticketing, role management, and custom economy system.",
     techStack: ["Discord.js", "Node.js", "Redis", "MongoDB"],
@@ -216,6 +219,7 @@ export const PROJECTS: Project[] = [
     title: "TaskFlow SaaS",
     category: "software",
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80",
+    link: "https://taskflow.example.com",
     description:
       "Cross-platform project management SaaS with real-time collaboration and analytics.",
     techStack: ["React", "Electron", "Node.js", "PostgreSQL"],
@@ -230,6 +234,7 @@ export const PROJECTS: Project[] = [
     title: "ChainVault DeFi",
     category: "blockchain",
     image: "https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=800&q=80",
+    link: "https://chainvault.example.com",
     description:
       "Decentralized finance protocol with staking, yield farming, and audited smart contracts.",
     techStack: ["Solidity", "Hardhat", "Ethers.js", "React"],
@@ -244,6 +249,7 @@ export const PROJECTS: Project[] = [
     title: "LuxeBrand Website",
     category: "website",
     image: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&q=80",
+    link: "https://luxebrand.example.com",
     description:
       "Premium brand website with immersive animations, CMS, and multilingual support.",
     techStack: ["Next.js", "Framer Motion", "Sanity CMS", "Vercel"],
@@ -258,6 +264,7 @@ export const PROJECTS: Project[] = [
     title: "TelegramTrade Bot",
     category: "bot",
     image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
+    link: "https://t.me/telegramtradebot",
     description:
       "Telegram trading alert bot with portfolio tracking and exchange API integrations.",
     techStack: ["Python", "Telegram Bot API", "CCXT"],

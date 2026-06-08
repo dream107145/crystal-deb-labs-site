@@ -24,6 +24,7 @@ export interface Project {
   title: string;
   category: ServiceId;
   image: string;
+  link: string;
   description: string;
   techStack: string[];
   client: string;

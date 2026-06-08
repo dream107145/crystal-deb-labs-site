@@ -6,6 +6,7 @@ import { AnimatePresence } from "framer-motion";
 import Hero from "@/components/sections/Hero";
 import ProjectCard from "@/components/cards/ProjectCard";
 import Modal from "@/components/ui/Modal";
+import { ExternalLink } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { PROJECTS, PORTFOLIO_FILTERS } from "@/lib/constants";
 import ScrollReveal from "@/components/animations/ScrollReveal";
@@ -17,6 +18,7 @@ function mapApiProject(p: {
   title: string;
   category: string;
   image: string;
+  link?: string;
   description: string;
   tech_stack: string[];
   client: string;
@@ -28,6 +30,7 @@ function mapApiProject(p: {
     title: p.title,
     category: p.category as Project["category"],
     image: p.image,
+    link: p.link || "",
     description: p.description,
     techStack: p.tech_stack,
     client: p.client,
@@ -170,9 +173,21 @@ export default function PortfolioContent() {
                 {selected.outcomes}
               </p>
             </div>
-            <Button href="/contact" variant="primary">
-              Contact Us
-            </Button>
+            <div className="flex flex-wrap gap-3">
+              {selected.link && (
+                <Button
+                  href={selected.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="primary"
+                >
+                  <ExternalLink size={16} /> Visit Project
+                </Button>
+              )}
+              <Button href="/contact" variant="outline">
+                Contact Us
+              </Button>
+            </div>
           </div>
         )}
       </Modal>

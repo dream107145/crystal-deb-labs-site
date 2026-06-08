@@ -3,6 +3,15 @@
 import { useState, useEffect } from "react";
 import Button from "@/components/ui/Button";
 import { inputClass } from "@/components/forms/inputClass";
+
+const fields = [
+  { id: "email", label: "Email", type: "email", placeholder: "contact@example.com" },
+  { id: "discord", label: "Discord URL", type: "url", placeholder: "https://discord.gg/..." },
+  { id: "discord_ticket", label: "Discord Ticket URL", type: "url", placeholder: "https://discord.gg/..." },
+  { id: "telegram", label: "Telegram URL", type: "url", placeholder: "https://t.me/..." },
+  { id: "telegram_handle", label: "Telegram Handle", type: "text", placeholder: "@username" },
+] as const;
+
 export default function ContactInfoManagement() {
   const [form, setForm] = useState({
     email: "",
@@ -72,11 +81,21 @@ export default function ContactInfoManagement() {
         </div>
       )}
 
-      <input className={inputClass()} placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-      <input className={inputClass()} placeholder="Discord URL" value={form.discord} onChange={(e) => setForm({ ...form, discord: e.target.value })} />
-      <input className={inputClass()} placeholder="Discord Ticket URL" value={form.discord_ticket} onChange={(e) => setForm({ ...form, discord_ticket: e.target.value })} />
-      <input className={inputClass()} placeholder="Telegram URL" value={form.telegram} onChange={(e) => setForm({ ...form, telegram: e.target.value })} />
-      <input className={inputClass()} placeholder="Telegram Handle" value={form.telegram_handle} onChange={(e) => setForm({ ...form, telegram_handle: e.target.value })} />
+      {fields.map((field) => (
+        <div key={field.id}>
+          <label htmlFor={field.id} className="block text-sm font-medium text-white mb-2">
+            {field.label} <span className="text-crystal-cyan">*</span>
+          </label>
+          <input
+            id={field.id}
+            type={field.type}
+            className={inputClass()}
+            placeholder={field.placeholder}
+            value={form[field.id]}
+            onChange={(e) => setForm({ ...form, [field.id]: e.target.value })}
+          />
+        </div>
+      ))}
 
       <Button variant="primary" onClick={handleSave} isLoading={saving}>
         Save Contact Info
