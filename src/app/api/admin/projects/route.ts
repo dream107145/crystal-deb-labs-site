@@ -7,7 +7,7 @@ const projectSchema = z.object({
   title: z.string().min(1),
   category: z.string().min(1),
   image: z.string().url(),
-  link: z.string().url(),
+  link: z.union([z.literal(""), z.string().url()]).optional().default(""),
   description: z.string().min(1),
   tech_stack: z.array(z.string()),
   client: z.string().min(1),

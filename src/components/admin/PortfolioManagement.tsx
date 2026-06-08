@@ -75,11 +75,6 @@ export default function PortfolioManagement() {
       setError("Please upload a cover image.");
       return;
     }
-    if (!form.link) {
-      setError("Please provide a project link.");
-      return;
-    }
-
     setError(null);
     setSaving(true);
     const payload = {
@@ -172,13 +167,13 @@ export default function PortfolioManagement() {
           />
           <div>
             <label htmlFor="project-link" className="block text-sm font-medium text-white mb-2">
-              Project Link <span className="text-crystal-cyan">*</span>
+              Project Link <span className="text-muted text-xs font-normal">(optional)</span>
             </label>
             <input
               id="project-link"
               type="url"
               className={inputClass()}
-              placeholder="https://example.com"
+              placeholder="https://example.com (optional)"
               value={form.link}
               onChange={(e) => setForm({ ...form, link: e.target.value })}
             />
