@@ -120,6 +120,21 @@ create trigger contact_info_updated_at
   before update on public.contact_info
   for each row execute function public.set_updated_at();
 
+-- Helper to check admin role without RLS recursion
+create or replace function public.is_admin()
+returns boolean
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select exists (
+    select 1
+    from public.profiles
+    where id = auth.uid() and role = 'admin'
+  );
+$$;
+
 -- RLS
 alter table public.profiles enable row level security;
 alter table public.email_verification_tokens enable row level security;
@@ -134,12 +149,7 @@ create policy "Users can view own profile"
 
 create policy "Admins can view all profiles"
   on public.profiles for select
-  using (
-    exists (
-      select 1 from public.profiles p
-      where p.id = auth.uid() and p.role = 'admin'
-    )
-  );
+  using (public.is_admin());
 
 create policy "Users can update own profile"
   on public.profiles for update
@@ -148,12 +158,7 @@ create policy "Users can update own profile"
 
 create policy "Admins can update all profiles"
   on public.profiles for update
-  using (
-    exists (
-      select 1 from public.profiles p
-      where p.id = auth.uid() and p.role = 'admin'
-    )
-  );
+  using (public.is_admin());
 
 -- Messages policies
 create policy "Users can view own messages"
@@ -170,12 +175,7 @@ create policy "Recipients can mark messages read"
 
 create policy "Admins can send messages"
   on public.messages for insert
-  with check (
-    exists (
-      select 1 from public.profiles p
-      where p.id = auth.uid() and p.role = 'admin'
-    )
-  );
+  with check (public.is_admin());
 
 -- Portfolio: public read for published, admin write
 create policy "Anyone can view published projects"
@@ -184,21 +184,11 @@ create policy "Anyone can view published projects"
 
 create policy "Admins can view all projects"
   on public.portfolio_projects for select
-  using (
-    exists (
-      select 1 from public.profiles p
-      where p.id = auth.uid() and p.role = 'admin'
-    )
-  );
+  using (public.is_admin());
 
 create policy "Admins can manage projects"
   on public.portfolio_projects for all
-  using (
-    exists (
-      select 1 from public.profiles p
-      where p.id = auth.uid() and p.role = 'admin'
-    )
-  );
+  using (public.is_admin());
 
 -- Contact info: public read, admin write
 create policy "Anyone can view contact info"
@@ -207,12 +197,7 @@ create policy "Anyone can view contact info"
 
 create policy "Admins can manage contact info"
   on public.contact_info for all
-  using (
-    exists (
-      select 1 from public.profiles p
-      where p.id = auth.uid() and p.role = 'admin'
-    )
-  );
+  using (public.is_admin());
 
 -- Storage bucket for avatars
 insert into storage.buckets (id, name, public)

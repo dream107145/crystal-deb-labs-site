@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { canSignIn } from "@/lib/auth";
 
 const signinSchema = z.object({
@@ -32,14 +33,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 401 });
     }
 
-    const { data: profile } = await supabase
+    // Use service role to avoid RLS recursion on profiles (see migration 002)
+    const admin = createAdminClient();
+    const { data: profile, error: profileError } = await admin
       .from("profiles")
       .select("*")
       .eq("id", data.user.id)
       .single();
 
-    if (!profile) {
+    if (profileError || !profile) {
       await supabase.auth.signOut();
+      console.error("Profile lookup failed:", profileError?.message);
       return NextResponse.json({ error: "Profile not found" }, { status: 404 });
     }
 
