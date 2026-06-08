@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff } from "lucide-react";
 import Button from "@/components/ui/Button";
 import ImageUpload, { MultiImageUpload } from "@/components/admin/ImageUpload";
 import { inputClass } from "@/components/forms/inputClass";
@@ -112,6 +112,24 @@ export default function PortfolioManagement() {
     }
   };
 
+  const handleToggleVisibility = async (project: PortfolioProject) => {
+    setError(null);
+    try {
+      const res = await fetch(`/api/admin/projects/${project.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ published: !project.published }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error);
+      setProjects((prev) =>
+        prev.map((p) => (p.id === project.id ? json.project : p))
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update visibility");
+    }
+  };
+
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this project?")) return;
     try {
@@ -155,10 +173,22 @@ export default function PortfolioManagement() {
             </select>
             <input className={inputClass()} placeholder="Client" value={form.client} onChange={(e) => setForm({ ...form, client: e.target.value })} />
             <input className={inputClass()} placeholder="Sort order" type="number" value={form.sort_order} onChange={(e) => setForm({ ...form, sort_order: parseInt(e.target.value) || 0 })} />
-            <label className="flex items-center gap-2 text-sm text-white">
-              <input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} className="accent-crystal-cyan" />
-              Published
-            </label>
+            <div>
+              <span className="block text-sm font-medium text-white mb-2">Visibility</span>
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, published: !form.published })}
+                className={cn(
+                  "inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors",
+                  form.published
+                    ? "bg-green-500/20 text-green-300 border border-green-500/40"
+                    : "bg-white/5 text-muted border border-white/10"
+                )}
+              >
+                {form.published ? <Eye size={16} /> : <EyeOff size={16} />}
+                {form.published ? "Shown on portfolio" : "Hidden from portfolio"}
+              </button>
+            </div>
           </div>
           <ImageUpload
             label="Cover Image"
@@ -200,7 +230,7 @@ export default function PortfolioManagement() {
                 <th className="p-3 text-left">Title</th>
                 <th className="p-3 text-left">Link</th>
                 <th className="p-3 text-left">Category</th>
-                <th className="p-3 text-left">Published</th>
+                <th className="p-3 text-left">Visibility</th>
                 <th className="p-3 text-left">Order</th>
                 <th className="p-3 text-left">Actions</th>
               </tr>
@@ -219,7 +249,22 @@ export default function PortfolioManagement() {
                     )}
                   </td>
                   <td className="p-3 capitalize text-muted">{p.category}</td>
-                  <td className="p-3">{p.published ? "Yes" : "No"}</td>
+                  <td className="p-3">
+                    <button
+                      type="button"
+                      onClick={() => handleToggleVisibility(p)}
+                      title={p.published ? "Hide from portfolio" : "Show on portfolio"}
+                      className={cn(
+                        "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-colors",
+                        p.published
+                          ? "bg-green-500/20 text-green-300 hover:bg-green-500/30"
+                          : "bg-white/10 text-muted hover:bg-white/15"
+                      )}
+                    >
+                      {p.published ? <Eye size={14} /> : <EyeOff size={14} />}
+                      {p.published ? "Shown" : "Hidden"}
+                    </button>
+                  </td>
                   <td className="p-3 text-muted">{p.sort_order}</td>
                   <td className="p-3">
                     <div className="flex gap-2">
