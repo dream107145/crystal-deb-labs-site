@@ -16,7 +16,9 @@ export async function GET() {
   const admin = createAdminClient();
   const { data, error } = await admin
     .from("testimonials")
-    .select("id, name, company, quote, rating, created_at")
+    .select(
+      "id, name, company, quote, rating, created_at, profile:profiles(avatar_url)"
+    )
     .eq("approved", true)
     .order("created_at", { ascending: false })
     .limit(12);
@@ -25,7 +27,14 @@ export async function GET() {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ testimonials: data });
+  const testimonials = (data || []).map((t) => {
+    const { profile, ...rest } = t as typeof t & {
+      profile: { avatar_url: string | null } | null;
+    };
+    return { ...rest, avatar_url: profile?.avatar_url ?? null };
+  });
+
+  return NextResponse.json({ testimonials });
 }
 
 export async function POST(request: Request) {

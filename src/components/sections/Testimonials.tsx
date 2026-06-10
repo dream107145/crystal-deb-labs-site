@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Star } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import type { Testimonial } from "@/types/database";
@@ -8,7 +9,7 @@ import type { Testimonial } from "@/types/database";
 type PublicTestimonial = Pick<
   Testimonial,
   "id" | "name" | "company" | "quote" | "rating" | "created_at"
->;
+> & { avatar_url: string | null };
 
 export default function Testimonials() {
   const [testimonials, setTestimonials] = useState<PublicTestimonial[]>([]);
@@ -53,11 +54,28 @@ export default function Testimonials() {
               <blockquote className="text-muted text-sm leading-relaxed flex-1">
                 &ldquo;{t.quote}&rdquo;
               </blockquote>
-              <figcaption className="mt-4 pt-4 border-t border-white/10">
-                <span className="text-white font-medium text-sm">{t.name}</span>
-                {t.company && (
-                  <span className="text-muted text-sm"> · {t.company}</span>
-                )}
+              <figcaption className="mt-4 pt-4 border-t border-white/10 flex items-center gap-3">
+                <div className="relative w-10 h-10 rounded-full overflow-hidden bg-crystal-blue/20 border border-white/10 shrink-0">
+                  {t.avatar_url ? (
+                    <Image
+                      src={t.avatar_url}
+                      alt={t.name}
+                      fill
+                      className="object-cover"
+                      sizes="40px"
+                    />
+                  ) : (
+                    <span className="w-full h-full flex items-center justify-center text-crystal-cyan font-semibold text-sm">
+                      {t.name.charAt(0).toUpperCase()}
+                    </span>
+                  )}
+                </div>
+                <div>
+                  <span className="text-white font-medium text-sm block">{t.name}</span>
+                  {t.company && (
+                    <span className="text-muted text-xs">{t.company}</span>
+                  )}
+                </div>
               </figcaption>
             </figure>
           </ScrollReveal>

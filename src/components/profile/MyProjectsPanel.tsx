@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Star } from "lucide-react";
+import { Star, MessageCircle } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
+import ProjectChat from "@/components/chat/ProjectChat";
 import { inputClass } from "@/components/forms/inputClass";
 import { cn } from "@/lib/utils";
-import type { ProjectRequest, RequestStatus } from "@/types/database";
+import type { Profile, ProjectRequest, RequestStatus } from "@/types/database";
 
 const statusStyles: Record<RequestStatus, string> = {
   pending: "bg-yellow-500/20 text-yellow-300",
@@ -26,12 +27,13 @@ const statusLabels: Record<RequestStatus, string> = {
   cancelled: "Cancelled",
 };
 
-export default function MyProjectsPanel() {
+export default function MyProjectsPanel({ profile }: { profile: Profile }) {
   const [requests, setRequests] = useState<ProjectRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [responding, setResponding] = useState<string | null>(null);
+  const [chatFor, setChatFor] = useState<ProjectRequest | null>(null);
 
   const [reviewOpen, setReviewOpen] = useState(false);
   const [reviewName, setReviewName] = useState("");
@@ -154,6 +156,11 @@ export default function MyProjectsPanel() {
               <div>
                 <h4 className="font-heading font-semibold text-white capitalize">
                   {req.service} Project
+                  {req.is_owner === false && (
+                    <span className="ml-2 px-2 py-0.5 rounded-full text-[10px] font-medium bg-crystal-blue/20 text-crystal-cyan align-middle">
+                      Assigned to you
+                    </span>
+                  )}
                 </h4>
                 <p className="text-xs text-muted">
                   Submitted {new Date(req.created_at).toLocaleDateString()}
@@ -170,6 +177,25 @@ export default function MyProjectsPanel() {
             </div>
 
             <p className="text-sm text-muted line-clamp-3">{req.details}</p>
+
+            {(req.assignments || []).length > 0 && (
+              <p className="text-xs text-muted">
+                Team:{" "}
+                <span className="text-white/80">
+                  {(req.assignments || [])
+                    .map((a) => a.developer?.email || "developer")
+                    .join(", ")}
+                </span>
+              </p>
+            )}
+
+            <Button
+              variant="outline"
+              onClick={() => setChatFor(req)}
+              className="text-sm py-2"
+            >
+              <MessageCircle size={16} /> Project Chat
+            </Button>
 
             {(req.quotes || []).map((quote) => (
               <div key={quote.id} className="glass rounded-xl p-4 space-y-3">
@@ -217,6 +243,16 @@ export default function MyProjectsPanel() {
           </div>
         ))
       )}
+
+      <Modal
+        isOpen={!!chatFor}
+        onClose={() => setChatFor(null)}
+        title={`Project Chat — ${chatFor ? `${chatFor.service.charAt(0).toUpperCase()}${chatFor.service.slice(1)}` : ""}`}
+      >
+        {chatFor && (
+          <ProjectChat requestId={chatFor.id} currentUserId={profile.id} />
+        )}
+      </Modal>
 
       <Modal isOpen={reviewOpen} onClose={() => setReviewOpen(false)} title="Leave a Review">
         <div className="space-y-4">

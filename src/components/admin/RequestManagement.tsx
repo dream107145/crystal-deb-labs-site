@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FileText, Trash2 } from "lucide-react";
+import { FileText, Trash2, MessageCircle, UserPlus, X } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
+import ProjectChat from "@/components/chat/ProjectChat";
 import { inputClass } from "@/components/forms/inputClass";
 import { cn } from "@/lib/utils";
-import type { ProjectRequest, RequestStatus } from "@/types/database";
+import type { Profile, ProjectRequest, RequestStatus } from "@/types/database";
 
 const STATUSES: RequestStatus[] = [
   "pending",
@@ -39,6 +40,11 @@ export default function RequestManagement() {
   const [quoteDescription, setQuoteDescription] = useState("");
   const [sendingQuote, setSendingQuote] = useState(false);
 
+  const [chatFor, setChatFor] = useState<ProjectRequest | null>(null);
+  const [adminId, setAdminId] = useState<string | null>(null);
+  const [developers, setDevelopers] = useState<Profile[]>([]);
+  const [assigning, setAssigning] = useState<string | null>(null);
+
   const fetchRequests = async () => {
     setLoading(true);
     try {
@@ -55,7 +61,60 @@ export default function RequestManagement() {
 
   useEffect(() => {
     fetchRequests();
+
+    fetch("/api/profile")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => setAdminId(json?.profile?.id ?? null))
+      .catch(() => {});
+
+    fetch("/api/admin/users")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) =>
+        setDevelopers(
+          ((json?.users || []) as Profile[]).filter(
+            (u) => u.role === "developer" && u.is_approved
+          )
+        )
+      )
+      .catch(() => {});
   }, []);
+
+  const assignDeveloper = async (requestId: string, developerId: string) => {
+    if (!developerId) return;
+    setAssigning(requestId);
+    setError(null);
+    try {
+      const res = await fetch(`/api/admin/requests/${requestId}/assign`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ developer_id: developerId }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error);
+      setMessage("Developer assigned and notified.");
+      fetchRequests();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to assign developer");
+    } finally {
+      setAssigning(null);
+    }
+  };
+
+  const unassignDeveloper = async (requestId: string, developerId: string) => {
+    setError(null);
+    try {
+      const res = await fetch(`/api/admin/requests/${requestId}/assign`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ developer_id: developerId }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error);
+      fetchRequests();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to remove developer");
+    }
+  };
 
   const updateStatus = async (id: string, status: RequestStatus) => {
     setError(null);
@@ -214,16 +273,84 @@ export default function RequestManagement() {
               </div>
             )}
 
-            <Button
-              variant="outline"
-              onClick={() => setQuoteFor(req)}
-              className="text-sm py-2"
-            >
-              <FileText size={16} /> Send Quote
-            </Button>
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs text-muted flex items-center gap-1">
+                  <UserPlus size={14} /> Team:
+                </span>
+                {(req.assignments || []).length === 0 && (
+                  <span className="text-xs text-muted/60">No developers assigned</span>
+                )}
+                {(req.assignments || []).map((a) => (
+                  <span
+                    key={a.id}
+                    className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-crystal-blue/20 text-crystal-cyan text-xs"
+                  >
+                    {a.developer?.email || "developer"}
+                    <button
+                      type="button"
+                      onClick={() => unassignDeveloper(req.id, a.developer_id)}
+                      className="hover:text-white"
+                      aria-label="Remove developer"
+                    >
+                      <X size={12} />
+                    </button>
+                  </span>
+                ))}
+                <select
+                  value=""
+                  disabled={assigning === req.id}
+                  onChange={(e) => assignDeveloper(req.id, e.target.value)}
+                  className="px-2 py-1 rounded-lg bg-white/5 border border-white/10 text-xs text-muted outline-none cursor-pointer"
+                >
+                  <option value="" className="bg-crystal-darker">
+                    + Assign developer…
+                  </option>
+                  {developers
+                    .filter(
+                      (d) =>
+                        !(req.assignments || []).some(
+                          (a) => a.developer_id === d.id
+                        )
+                    )
+                    .map((d) => (
+                      <option key={d.id} value={d.id} className="bg-crystal-darker text-white">
+                        {d.email}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setQuoteFor(req)}
+                className="text-sm py-2"
+              >
+                <FileText size={16} /> Send Quote
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => setChatFor(req)}
+                className="text-sm py-2"
+              >
+                <MessageCircle size={16} /> Project Chat
+              </Button>
+            </div>
           </div>
         ))
       )}
+
+      <Modal
+        isOpen={!!chatFor}
+        onClose={() => setChatFor(null)}
+        title={`Project Chat — ${chatFor?.name ?? ""}`}
+      >
+        {chatFor && adminId && (
+          <ProjectChat requestId={chatFor.id} currentUserId={adminId} />
+        )}
+      </Modal>
 
       <Modal
         isOpen={!!quoteFor}

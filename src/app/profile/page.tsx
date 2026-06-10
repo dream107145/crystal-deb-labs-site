@@ -92,7 +92,7 @@ export default function ProfilePage() {
 
         {tab === "profile" && <ProfileForm profile={profile} onUpdate={setProfile} />}
         {tab === "inbox" && <InboxPanel />}
-        {tab === "projects" && <MyProjectsPanel />}
+        {tab === "projects" && <MyProjectsPanel profile={profile} />}
       </div>
     </section>
   );

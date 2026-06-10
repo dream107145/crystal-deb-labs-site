@@ -62,6 +62,8 @@ export interface ProjectRequest {
   created_at: string;
   updated_at: string;
   quotes?: Quote[];
+  assignments?: RequestAssignment[];
+  is_owner?: boolean;
 }
 
 export type QuoteStatus = "pending" | "accepted" | "declined";
@@ -75,6 +77,23 @@ export interface Quote {
   status: QuoteStatus;
   created_at: string;
   updated_at: string;
+}
+
+export interface RequestAssignment {
+  id: string;
+  request_id: string;
+  developer_id: string;
+  created_at: string;
+  developer?: Pick<Profile, "id" | "email" | "avatar_url">;
+}
+
+export interface ProjectMessage {
+  id: string;
+  request_id: string;
+  sender_id: string;
+  body: string;
+  created_at: string;
+  sender?: Pick<Profile, "id" | "email" | "avatar_url" | "role">;
 }
 
 export interface Notification {
