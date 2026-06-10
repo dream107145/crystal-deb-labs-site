@@ -5,15 +5,17 @@ import { useRouter } from "next/navigation";
 import UserManagement from "@/components/admin/UserManagement";
 import PortfolioManagement from "@/components/admin/PortfolioManagement";
 import ContactInfoManagement from "@/components/admin/ContactInfoManagement";
+import RequestManagement from "@/components/admin/RequestManagement";
+import TestimonialManagement from "@/components/admin/TestimonialManagement";
 import Button from "@/components/ui/Button";
 import { signOutUser } from "@/lib/signOut";
 import { cn } from "@/lib/utils";
 
-type Tab = "users" | "portfolio" | "contact";
+type Tab = "requests" | "users" | "portfolio" | "testimonials" | "contact";
 
 export default function AdminPage() {
   const router = useRouter();
-  const [tab, setTab] = useState<Tab>("users");
+  const [tab, setTab] = useState<Tab>("requests");
 
   const handleSignOut = async () => {
     await signOutUser();
@@ -22,8 +24,10 @@ export default function AdminPage() {
   };
 
   const tabs: { id: Tab; label: string }[] = [
+    { id: "requests", label: "Requests" },
     { id: "users", label: "Users" },
     { id: "portfolio", label: "Portfolio" },
+    { id: "testimonials", label: "Testimonials" },
     { id: "contact", label: "Contact Info" },
   ];
 
@@ -55,8 +59,10 @@ export default function AdminPage() {
           ))}
         </div>
 
+        {tab === "requests" && <RequestManagement />}
         {tab === "users" && <UserManagement />}
         {tab === "portfolio" && <PortfolioManagement />}
+        {tab === "testimonials" && <TestimonialManagement />}
         {tab === "contact" && <ContactInfoManagement />}
       </div>
     </section>

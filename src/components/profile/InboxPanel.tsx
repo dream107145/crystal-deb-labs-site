@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Mail, Send, Inbox } from "lucide-react";
+import { Mail, Send, Inbox, Reply } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { inputClass } from "@/components/forms/inputClass";
 import { cn } from "@/lib/utils";
@@ -9,17 +9,31 @@ import type { Message } from "@/types/database";
 
 type Folder = "inbox" | "sent";
 
+interface Recipient {
+  id: string;
+  email: string;
+  role: string;
+}
+
 export default function InboxPanel() {
   const [folder, setFolder] = useState<Folder>("inbox");
   const [messages, setMessages] = useState<Message[]>([]);
   const [selected, setSelected] = useState<Message | null>(null);
   const [loading, setLoading] = useState(true);
   const [composing, setComposing] = useState(false);
+  const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [composeTo, setComposeTo] = useState("");
   const [composeSubject, setComposeSubject] = useState("");
   const [composeBody, setComposeBody] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/messages/recipients")
+      .then((res) => res.json())
+      .then((json) => setRecipients(json.recipients || []))
+      .catch(() => {});
+  }, []);
 
   const fetchMessages = async (f: Folder) => {
     setLoading(true);
@@ -48,6 +62,13 @@ export default function InboxPanel() {
         prev.map((m) => (m.id === msg.id ? { ...m, is_read: true } : m))
       );
     }
+  };
+
+  const startReply = (msg: Message) => {
+    setComposeTo(msg.sender_id);
+    setComposeSubject(msg.subject.startsWith("Re: ") ? msg.subject : `Re: ${msg.subject}`);
+    setComposeBody("");
+    setComposing(true);
   };
 
   const handleSend = async () => {
@@ -115,12 +136,20 @@ export default function InboxPanel() {
       {composing ? (
         <div className="p-6 space-y-4">
           <h3 className="font-heading font-semibold text-white">New Message</h3>
-          <input
+          <select
             className={inputClass()}
-            placeholder="Recipient user ID (UUID)"
             value={composeTo}
             onChange={(e) => setComposeTo(e.target.value)}
-          />
+          >
+            <option value="" className="bg-crystal-darker">
+              Select recipient...
+            </option>
+            {recipients.map((r) => (
+              <option key={r.id} value={r.id} className="bg-crystal-darker">
+                {r.email} ({r.role})
+              </option>
+            ))}
+          </select>
           <input
             className={inputClass()}
             placeholder="Subject"
@@ -187,7 +216,16 @@ export default function InboxPanel() {
                   {" · "}
                   {new Date(selected.created_at).toLocaleString()}
                 </p>
-                <p className="text-muted whitespace-pre-wrap">{selected.body}</p>
+                <p className="text-muted whitespace-pre-wrap mb-4">{selected.body}</p>
+                {folder === "inbox" && (
+                  <Button
+                    variant="outline"
+                    onClick={() => startReply(selected)}
+                    className="text-sm py-2"
+                  >
+                    <Reply size={16} /> Reply
+                  </Button>
+                )}
               </>
             ) : (
               <p className="text-muted text-sm">Select a message to read.</p>

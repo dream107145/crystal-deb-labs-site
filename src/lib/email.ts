@@ -157,6 +157,103 @@ export async function sendApprovalEmail(email: string) {
   return { sent: true as const };
 }
 
+export async function sendPasswordResetEmail(email: string, token: string) {
+  const resend = getResendClient();
+  const fromEmail = resolveFromEmail(process.env.RESEND_FROM_EMAIL);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+  if (!resend || !fromEmail) {
+    return { sent: false as const, reason: "missing_config" as const };
+  }
+
+  const resetUrl = `${siteUrl}/auth/reset-password?token=${token}`;
+
+  const { error } = await resend.emails.send({
+    from: fromEmail,
+    to: [email],
+    subject: "Reset your Crystal Dev Labs password",
+    html: `
+      <h2>Password Reset</h2>
+      <p>We received a request to reset your password. Click the button below to choose a new one.</p>
+      <p><a href="${resetUrl}" style="display:inline-block;padding:12px 24px;background:#00d4ff;color:#0a0a0f;text-decoration:none;border-radius:8px;font-weight:600;">Reset Password</a></p>
+      <p style="color:#888;font-size:14px;">Or copy this link: ${resetUrl}</p>
+      <p style="color:#888;font-size:14px;">This link expires in 1 hour. If you didn't request this, you can ignore this email.</p>
+    `,
+  });
+
+  if (error) throw new Error(error.message);
+  return { sent: true as const };
+}
+
+const statusLabels: Record<string, string> = {
+  pending: "Pending Review",
+  quoted: "Quote Sent",
+  in_progress: "In Progress",
+  review: "In Review",
+  delivered: "Delivered",
+  cancelled: "Cancelled",
+};
+
+export async function sendStatusUpdateEmail(
+  email: string,
+  requestService: string,
+  status: string
+) {
+  const resend = getResendClient();
+  const fromEmail = resolveFromEmail(process.env.RESEND_FROM_EMAIL);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+  if (!resend || !fromEmail) {
+    return { sent: false as const, reason: "missing_config" as const };
+  }
+
+  const label = statusLabels[status] ?? status;
+
+  const { error } = await resend.emails.send({
+    from: fromEmail,
+    to: [email],
+    subject: `Project update: ${label}`,
+    html: `
+      <h2>Project Status Update</h2>
+      <p>Your <strong>${escapeHtml(requestService)}</strong> project request status changed to <strong>${escapeHtml(label)}</strong>.</p>
+      <p><a href="${siteUrl}/profile" style="display:inline-block;padding:12px 24px;background:#00d4ff;color:#0a0a0f;text-decoration:none;border-radius:8px;font-weight:600;">View Project</a></p>
+    `,
+  });
+
+  if (error) throw new Error(error.message);
+  return { sent: true as const };
+}
+
+export async function sendQuoteEmail(
+  email: string,
+  requestService: string,
+  amount: number,
+  currency: string
+) {
+  const resend = getResendClient();
+  const fromEmail = resolveFromEmail(process.env.RESEND_FROM_EMAIL);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+  if (!resend || !fromEmail) {
+    return { sent: false as const, reason: "missing_config" as const };
+  }
+
+  const { error } = await resend.emails.send({
+    from: fromEmail,
+    to: [email],
+    subject: `You received a quote for your ${requestService} project`,
+    html: `
+      <h2>New Quote</h2>
+      <p>We've sent you a quote of <strong>${currency} ${amount.toLocaleString()}</strong> for your <strong>${escapeHtml(requestService)}</strong> project request.</p>
+      <p>Sign in to review, accept, or decline the quote.</p>
+      <p><a href="${siteUrl}/profile" style="display:inline-block;padding:12px 24px;background:#00d4ff;color:#0a0a0f;text-decoration:none;border-radius:8px;font-weight:600;">Review Quote</a></p>
+    `,
+  });
+
+  if (error) throw new Error(error.message);
+  return { sent: true as const };
+}
+
 export async function sendContactNotification(data: ContactEmailData) {
   const apiKey = process.env.RESEND_API_KEY;
   const adminEmail = process.env.ADMIN_EMAIL;

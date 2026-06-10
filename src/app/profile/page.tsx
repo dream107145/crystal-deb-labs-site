@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProfileForm from "@/components/profile/ProfileForm";
 import InboxPanel from "@/components/profile/InboxPanel";
+import MyProjectsPanel from "@/components/profile/MyProjectsPanel";
 import Button from "@/components/ui/Button";
 import { signOutUser } from "@/lib/signOut";
 import type { Profile } from "@/types/database";
@@ -12,7 +13,7 @@ export default function ProfilePage() {
   const router = useRouter();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<"profile" | "inbox">("profile");
+  const [tab, setTab] = useState<"profile" | "inbox" | "projects">("profile");
 
   useEffect(() => {
     fetch("/api/profile")
@@ -76,13 +77,22 @@ export default function ProfilePage() {
           >
             Inbox
           </button>
+          <button
+            type="button"
+            onClick={() => setTab("projects")}
+            className={`px-4 py-2 rounded-lg text-sm transition-colors ${
+              tab === "projects"
+                ? "bg-crystal-blue/20 text-crystal-cyan"
+                : "text-muted hover:text-white"
+            }`}
+          >
+            My Projects
+          </button>
         </div>
 
-        {tab === "profile" ? (
-          <ProfileForm profile={profile} onUpdate={setProfile} />
-        ) : (
-          <InboxPanel />
-        )}
+        {tab === "profile" && <ProfileForm profile={profile} onUpdate={setProfile} />}
+        {tab === "inbox" && <InboxPanel />}
+        {tab === "projects" && <MyProjectsPanel />}
       </div>
     </section>
   );

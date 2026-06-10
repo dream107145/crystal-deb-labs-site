@@ -5,6 +5,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { AUTH_CHANGED_EVENT } from "@/lib/signOut";
 import Button from "./Button";
+import NotificationBell from "./NotificationBell";
 import type { Profile } from "@/types/database";
 
 export default function AuthLinks() {
@@ -78,6 +79,7 @@ export default function AuthLinks() {
 
   return (
     <div className="hidden md:flex items-center gap-3">
+      <NotificationBell userId={profile.id} />
       {profile.role === "admin" && (
         <Link href="/admin" className="text-sm text-crystal-cyan hover:text-white transition-colors">
           Admin

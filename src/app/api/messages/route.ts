@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getSession } from "@/lib/auth";
+import { createNotification } from "@/lib/notifications";
 
 const messageSchema = z.object({
   recipient_id: z.string().uuid(),
@@ -94,6 +95,14 @@ export async function POST(request: Request) {
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
+
+  await createNotification({
+    userId: parsed.data.recipient_id,
+    type: "message",
+    title: "New message",
+    body: parsed.data.subject,
+    link: "/profile",
+  });
 
   return NextResponse.json({ message: data });
 }

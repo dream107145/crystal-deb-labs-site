@@ -67,9 +67,14 @@ export default function SignInForm() {
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-white mb-2">
-          Password <span className="text-crystal-cyan">*</span>
-        </label>
+        <div className="flex items-center justify-between mb-2">
+          <label htmlFor="password" className="block text-sm font-medium text-white">
+            Password <span className="text-crystal-cyan">*</span>
+          </label>
+          <Link href="/auth/forgot-password" className="text-xs text-crystal-cyan hover:underline">
+            Forgot password?
+          </Link>
+        </div>
         <input id="password" type="password" {...register("password")} className={inputClass(errors.password)} />
         {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>}
       </div>

@@ -42,6 +42,63 @@ export interface PortfolioProject {
   updated_at: string;
 }
 
+export type RequestStatus =
+  | "pending"
+  | "quoted"
+  | "in_progress"
+  | "review"
+  | "delivered"
+  | "cancelled";
+
+export interface ProjectRequest {
+  id: string;
+  user_id: string | null;
+  name: string;
+  email: string;
+  service: string;
+  details: string;
+  budget: string;
+  status: RequestStatus;
+  created_at: string;
+  updated_at: string;
+  quotes?: Quote[];
+}
+
+export type QuoteStatus = "pending" | "accepted" | "declined";
+
+export interface Quote {
+  id: string;
+  request_id: string;
+  amount: number;
+  currency: string;
+  description: string;
+  status: QuoteStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Notification {
+  id: string;
+  user_id: string;
+  type: string;
+  title: string;
+  body: string;
+  link: string;
+  is_read: boolean;
+  created_at: string;
+}
+
+export interface Testimonial {
+  id: string;
+  user_id: string;
+  name: string;
+  company: string;
+  quote: string;
+  rating: number;
+  approved: boolean;
+  created_at: string;
+}
+
 export interface ContactInfo {
   id: number;
   email: string;

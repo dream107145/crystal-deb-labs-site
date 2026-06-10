@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { sendContactNotification } from "@/lib/email";
+import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 const contactSchema = z.object({
   name: z.string().min(2),
@@ -51,10 +53,33 @@ async function notifyDiscord(data: z.infer<typeof contactSchema>) {
   }
 }
 
+async function saveProjectRequest(data: z.infer<typeof contactSchema>) {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const admin = createAdminClient();
+    await admin.from("project_requests").insert({
+      user_id: user?.id ?? null,
+      name: data.name,
+      email: data.email,
+      service: data.service,
+      details: data.details,
+      budget: data.budget,
+    });
+  } catch (err) {
+    console.error("Failed to save project request:", err);
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const data = contactSchema.parse(body);
+
+    await saveProjectRequest(data);
 
     const emailResult = await sendContactNotification(data);
 
